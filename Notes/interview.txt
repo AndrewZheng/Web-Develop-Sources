@@ -1,0 +1,136 @@
+一、web前端面试的基本知识点
+
+1、DOM结构——两个节点之间可能存在哪些关系以及如何在节点之间任意移动。  
+   Finished  GetEelementById（）GetEelementByTagName（）
+   document.documentElement     返回文档的根节点<html> 
+   document.body     <body> 
+   document.activeElement 返回当前文档中被击活的标签节点(ie) 
+   event.fromElement        返回鼠标移出的源节点(ie) 
+   event.toElement       返回鼠标移入的源节点(ie) 
+   event.srcElement     返回激活事件的源节点(ie) 
+   event.target         返回激活事件的源节点(firefox) 
+ 
+   当前对象为node 
+   返回父节点：node.parentNode, node.parendElement, 
+   返回所有子节点：node.childNodes（包含文本节点及标签节点）,node.children 
+   返回第一个子节点：node.firstChild 
+   返回最后一个子节点： node.lastChild 
+   返回同属上一个子节点：node.previousSibling 
+   返回同属下一个子节点：node.nextSibling 
+
+   parentNode和parentElement功能一样，childNodes和children功能一样。但是parentNode和childNodes是符合W3C标准的，
+   可以说比较通用。而另外两个只是IE支持，不是标准，Firefox就不支持 ,所以大家只要记得有parentElement和children就行了 
+
+2、DOM操作——怎样添加、移除、移动、复制、创建和查找节点。
+
+3、事件——怎样使用事件以及IE和DOM事件模型之间存在哪些主要差别。
+   最常见的就是obj.onclick=handler这种方式(更恶劣的是在Html代码的元素标签中直接加上onclick属性，完全没达到视图和动作分开的原则)。
+   我们暂时称这种方式的事件添加为Traditional(传统方式)吧，IE有自己的IE Event Module，而火狐等浏览器则遵循的W3C方式的Event Module，
+   火狐用addEventListener和removeEventListener
+   IE用attachEvent和detachEvent俩个函数来处理事件
+
+   PS:当我们需要阻止浏览器某DOM元素的默认行为的时候在W3C下调用e.preventDefault()，而在IE下则通过window.event.returnValue＝false来实现。
+   当我们要阻止事件冒泡的时候，在W3C标准里调用e.stopPropagation()，而在IE下通过设置window.event.cancelBubble=true来实现。
+
+4、XMLHttpRequest——这是什么、怎样完整地执行一次GET请求、怎样检测错误。
+   XMLHttpRequest 对象提供了在网页加载后与服务器进行通信的方法。
+1 <script type="text/javascript">
+ 2     var xmlhttp;
+ 3     function loadXMLDoc(url){
+ 4         xmlhttp = null;
+ 5         if(window.XMLHttpRequest){    //code for all new browsers
+ 6             xmlhttp=newXMLHttpRequest();
+ 7         }elseif(window.ActiveXObject){    //code for IE5 and IE6
+ 8             xmlhttp=newActiveXObject("Microsoft.XMLHTTP");
+ 9         }
+10         if(xmlhttp!=null){
+11             xmlhttp.onreadystatechange=state_Change;
+12                xmlhttp.open("GET",url,true);
+13             xmlhttp.send(null);
+14         }else{
+15             alert("Your browser does not support XMLHTTP.");
+16         }
+17 }
+18 
+19 function state_Change(){
+20     if(xmlhttp.readyState==4){    //4 = "loaded"
+21         if(xmlhttp.status==200){    //200 = OK
+22             //...our code here...
+23         }else{
+24             alert("Problem retrieving XML data");
+25         }
+26     }
+27 }
+
+5、严格模式与混杂模式——如何触发这两种模式，区分它们有何意义。
+  当浏览器厂商开始创建与标准兼容的浏览器时，他们希望确保向后兼容性。为了实现这一点，他们创建了两种呈现模式：
+  标准模式和混杂模式（quirks mode）。在标准模式中，浏览器根据规范呈现页面；在混杂模式中，
+  页面以一种比较宽松的向后兼容的方式显示。
+  对于这两种模式之间的差异，最显著的一个例子与Windows上IE专有的盒模型有关。在IE 6出现时，
+  在标准模式中使用的是正确的盒模型，在混杂模式中使用的则是老式的专有盒模型。
+  
+  为了维持对IE 5和更低版本的向后兼容性，Opera 7和更高版本也在混杂模式中使用有缺点的IE盒模型。
+  呈现方面的其他差异比较小，而且是与特定浏览器相关的，包括对于十六进制颜色值不需要#号、假设CSS中没有指定单位的长度的单位是像素，
+  以及在使用关键字时将字号增加一级。但是有过渡DTD而没有URI会导致页面以混杂模式呈现。
+  DOCTYPE不存在或形式不正确会导致HTML和XHTML文档以混杂模式呈现。
+
+6、盒模型——外边距、内边距和边框之间的关系，IE 8以下版本的浏览器中的盒模型有什么不同。
+  可以看出，IE6 盒子模型中，盒子的尺寸包含了 内容区，padding， border 和 margin 这四个部分，
+  而 W3C 的盒子模型中，盒子的尺寸只包含内容区，padding，border 和 margin 被排除在盒子尺寸之外。
+
+7、块级元素与行内元素——怎么用CSS控制它们、它们怎样影响周围的元素以及你觉得应该如何定义它们的样式。
+  display：inline；display：block；
+  需要浮动的元素可使用CSS中float属性来定义元素的浮动位置，
+  left：往左浮动，right：往右浮动
+
+8、浮动元素——怎么使用它们、它们有什么问题以及怎么解决这些问题。
+     float：left；float：right；
+     浮动元素引起的问题：
+
+（1）父元素的高度无法被撑开，影响与父元素同级的元素
+
+（2）与浮动元素同级的非浮动元素会跟随其后
+
+（3）若非第一个元素浮动，则该元素之前的元素也需要浮动，否则会影响页面显示的结构
+
+解决方法：
+
+使用CSS中的clear:both;属性来清除元素的浮动可解决2、3问题，对于问题1，添加如下样式，给父元素添加clearfix样式：
+
+.clearfix:after{content: ".";display: block;height: 0;clear: both;visibility: hidden;}
+
+.clearfix{display: inline-block;}  /* for IE/Mac */
+
+9、HTML与XHTML——二者有什么区别，你觉得应该使用哪一个并说出理由。  比较偏向xhtml
+
+    XHTML 元素必须被正确地嵌套。
+    XHTML 元素必须被关闭。
+    标签名必须用小写字母。
+    XHTML 文档必须拥有根元素。
+
+10、JSON——它是什么、为什么应该使用它、到底该怎么使用它，说出实现细节来。json是一种数据格式，轻量，方便
+
+    JSON 指的是 JavaScript 对象表示法（JavaScript Object Notation）
+    JSON 是轻量级的文本数据交换格式
+    JSON 独立于语言和平台
+    JSON 具有自我描述性，更易理解
+
+    没有结束标签
+    更短
+    读写的速度更快
+    能够使用内建的 JavaScript eval() 方法进行解析
+    使用数组
+    不使用保留字
+
+    读取 JSON 字符串
+    用 eval() 处理 JSON 字符串
+
+11、大神级别的技术面试
+一、语义化标签
+1）tite与h1的区别
+2）b与strong的区别
+3）i与em的区别
+
+二、事件绑定
+addEventListener，第三个参数是用来表示事件是以事件冒泡还是事件捕获这个各位都知道！但是他问的问题是：
+我们给一个dom同时绑定两个点击事件，一个用捕获，一个用冒泡，你来说下会执行几次事件，然后会先执行冒泡还是捕获！！！
