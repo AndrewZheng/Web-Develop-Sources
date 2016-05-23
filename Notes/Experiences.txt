@@ -288,7 +288,9 @@
 	3)向下取整,舍去小数部分 : Math.floor(number) ;如Math.floor(7.6) **返回7
 	4)四舍五入 :Math.round(number) ;如Math.round(3.4) **返回3, 但是Math.round(3.5)**返回4
 
-
+14、设置自增键从0开始
+        1）dbcc checkident('test',reseed,0)   test为表名
+        2）truncate table test(表名)
 
 三、开发和调试技巧+快键键
 
