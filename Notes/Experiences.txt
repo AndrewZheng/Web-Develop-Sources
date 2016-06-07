@@ -380,6 +380,63 @@
         1）dbcc checkident('test',reseed,0)   test为表名
         2）truncate table test(表名)
 
+15、JS判断字符串string是不是Date类型
+function isDate(s) {
+        // make sure it is in the expected format
+        if (s.search(/^\d{1,2}[\/|\-|\.|_]\d{1,2}[\/|\-|\.|_]\d{4}/g) != 0)
+            return false;
+
+        // remove other separators that are not valid with the Date class    
+        s = s.replace(/[\-|\.|_]/g, "/");
+
+        // convert it into a date instance
+        var dt = new Date(Date.parse(s));
+
+        // check the components of the date
+        // since Date instance automatically rolls over each component
+        var arrDateParts = s.split("/");
+        return (
+            dt.getMonth() == arrDateParts[0] - 1 &&
+            dt.getDate() == arrDateParts[1] &&
+            dt.getFullYear() == arrDateParts[2]
+        );
+}
+
+ String.prototype.isTime = function() {
+            var r = this.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
+            if (r == null) return false;
+            var d = new Date(r[1], r[3] - 1, r[4]);
+            return (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[3] && d.getDate() == r[4]);
+        };
+
+		function isDate(s) {
+        // make sure it is in the expected format
+        if (s.search(/^\d{1,2}[\/|\-|\.|_]\d{1,2}[\/|\-|\.|_]\d{4}/g) != 0)
+            return false;
+
+        // remove other separators that are not valid with the Date class    
+        s = s.replace(/[\-|\.|_]/g, "/");
+
+        // convert it into a date instance
+        var dt = new Date(Date.parse(s));
+
+        // check the components of the date
+        // since Date instance automatically rolls over each component
+        var arrDateParts = s.split("/");
+        return (
+            dt.getMonth() == arrDateParts[0] - 1 &&
+            dt.getDate() == arrDateParts[1] &&
+            dt.getFullYear() == arrDateParts[2]
+        );
+}
+
+ String.prototype.isTime = function() {
+            var r = this.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
+            if (r == null) return false;
+            var d = new Date(r[1], r[3] - 1, r[4]);
+            return (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[3] && d.getDate() == r[4]);
+        };
+
 三、开发和调试技巧+快键键
 
 1、Elements页卡中几个有用的快捷键  [chrome dev tools]
