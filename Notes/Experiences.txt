@@ -458,6 +458,15 @@ function isDate(s) {
 	4)自动化测试
 	5)发布到pipeline和各个环境
 
+4、git相关命令
+    1)git stash  暂时保留工作现场
+	  git stash list   查看缓区的list
+	2)git stash apply 恢复之前缓存的工作现场
+	3)git stash pop   恢复并删除之前缓存的工作现场
+	4)git branch -D <name> 强行删除没有被合并过的分支
+	5)git branch --set-upstream branch-name origin/branch-name 创建本地分支和远程分支的链接关系
+	6)git tag -a v0.1 -m "version 0.1 released" <commit id>  PS:-a 指定标签名 -m 评论 
+
 四、Web安全相关
 1、CSRF Cross Site Request Forgery --跨站域请求伪造
    原理：用户C登录了信任的网站webA 生成了用户C登录信息的cookie，用户C意外登录了恶意攻击者webB，webB带着C在webA下生的cookie信息模拟真实用户C操作
