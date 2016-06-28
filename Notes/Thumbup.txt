@@ -1,0 +1,22 @@
+实现点赞功能的编程回顾总结：  PS：前台-F  后台-B   EF框架
+1、查询
+   F：前台也需要显示点赞总数，并且得判断当前用户是否对某文章点过赞，记录状态，前台ui做相应变化
+      所以viewmodel有IsTumbuped字段，
+      view.IsThumbuped = list.Any(x => x.userId == ViewBag.LillyId && x.IsDeleted != true);
+      在Article实体中声明ArticleThumbsUp的集合属性，
+      在articlethumbup实体中声明[ForeignKey("ArticleID")]public virtual ArticleInfo ArticleInfo { get; set; }
+      这样前台要显示的点赞总数就很好计算了，注意得剔除IsDeleted=True的数据。
+      
+   B：后台有管理界面，通常点赞数为文章的一个子属性，俩者靠文章的id做关联。
+      后台列表页要显示这篇文章被点赞的总数，总数怎么来，根据articleid做链表查询，count userid
+      就能得出点赞数。注意得剔除IsDeleted=True的数据。
+
+   SQL：通常单独设计一张表用来存某个人对某篇文章进行了点赞。所以点赞表的结构也清晰可见
+        Id UserID UserName ArticleID CreatedDate UpdatedDate IsDeleted
+        (PK)                 (FK)
+
+2、更新
+   F：用ajax去更新点赞数，然后在回调函数处理UI和点赞数的变化。将文章的id作为参数传递回来
+
+   B：后台定义GetThumbupCount这样一个action去更新点赞数，在service里定义方法UpdateArticleThumbsUp
+      2个参数，articleId和当前userId。

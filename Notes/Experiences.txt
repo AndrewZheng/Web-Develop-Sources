@@ -436,7 +436,15 @@ function isDate(s) {
             var d = new Date(r[1], r[3] - 1, r[4]);
             return (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[3] && d.getDate() == r[4]);
         };
+16、jquery动态绑定事件on()  
+            第二个参数为命名空间，命中动态添加的元素a.js-add-item，这样不用重新为其绑定事件
+            $('.panel-body').on('click', 'a.js-add-item', function (e) {
+                 addOption(e.target);
+            });
 
+            $('.panel-body').on('click', 'a.js-delete-item', function (e) {
+                delOption(e.target);
+            });
 三、开发和调试技巧+快键键
 
 1、Elements页卡中几个有用的快捷键  [chrome dev tools]
