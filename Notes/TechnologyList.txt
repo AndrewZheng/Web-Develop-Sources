@@ -1,0 +1,51 @@
+Core Technology
+1¡¢html5  [elements websocket manifest]
+2¡¢CSS3
+3¡¢Javascript
+4¡¢Sass/less    
+5¡¢NodeJs
+6¡¢SVG
+7¡¢Jquery
+8¡¢AngularJs 2x
+
+FE UI Framework
+1¡¢Bootstrap 3x 
+2¡¢Express 4x
+3¡¢Semantic UI
+
+FE Security
+1¡¢XSS
+2¡¢CRSF
+
+Framework
+1¡¢.Net(ASP.Net)
+2¡¢EF£¨Code First£©
+3¡¢Orchard
+4¡¢.Net Core
+
+Language
+1¡¢c#   
+2¡¢java
+3¡¢Markdown
+
+Tool
+1¡¢Git
+2¡¢Grunt
+3¡¢Gulp
+4¡¢Resharper
+5¡¢PS
+7¡¢Snagit
+8¡¢Core Ftp
+
+Editor
+1¡¢Visual Studio
+2¡¢WebStorm
+3¡¢VSCode
+
+CMS
+1¡¢Crownpeak
+
+Wechat 
+1¡¢ÆóÒµºÅÓ¦ÓÃ¿ª·¢
+2¡¢·þÎñºÅ×¢²á
+3¡¢Wechat JSSDK
