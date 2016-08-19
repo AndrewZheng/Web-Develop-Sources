@@ -445,6 +445,14 @@ function isDate(s) {
             $('.panel-body').on('click', 'a.js-delete-item', function (e) {
                 delOption(e.target);
             });
+			
+17、jquery 'click' event doesn't work on iOS Safari.
+			$('body').on('click touchstart', 'img',function(){
+			   //something goes here
+			})
+			在Ios和Safari上使用click事件委托，如果只监听click事件，那么点击不会起作用，不执行函数。
+			所以必须同时监听touchstart事件
+			
 三、开发和调试技巧+快键键
 
 1、Elements页卡中几个有用的快捷键  [chrome dev tools]
