@@ -453,6 +453,110 @@ function isDate(s) {
 			在Ios和Safari上使用click事件委托，如果只监听click事件，那么点击不会起作用，不执行函数。
 			所以必须同时监听touchstart事件
 			
+18、CMD和AMD的介绍和区别
+    1.AMD--(异步模块定义)是为浏览器环境设计的。AMD 定义了一套 JavaScript 模块依赖异步加载标准，来解决同步加载的问题。
+
+    规范里只定义了一个全局的define函数。
+    define(id?: String, dependencies?: String[], factory: Function|Object);
+	
+	instance:
+	//定义一个叫Test模块
+	define('Test',['jquery'], function($){
+	  return {
+		sayHello: function(){
+		  $('body').text('Hello World');
+		}
+	  }
+	});
+
+	// 使用Test模块
+	define(['Test'], function(Test){
+	  Test.sayHello();
+	})
+	
+    2.CMD--CommonJS规范是为了解决 JavaScript 的作用域问题而定义的模块形式，可以使每个模块在它自身的命名空间中执行。
+	该规范的主要内容是，模块必须通过 module.exports 导出对外的变量或接口，通过require() 来导入其他模块的输出到当前模块作用域中
+	
+	规范里只定义了一个全局的define函数。
+    define(factory);
+    该函数只接受一个参数factory，可以为函数或者其他的有效值。如果factory为函数，则模块输出该函数的返回值。
+	函数的前三个参数分别为require, exports, module三个参数。 
+	* require: * require是一个函数，接受一个模块名，返回该模块的输出。如果请求的模块没有输出，则返回null。 
+	* require.async: 是一个函数，接受一个模块名列表和一个回调函数(可选参数)。该函数接受模块的输出作为参数，其顺序与模块名列表的顺序一样。 
+	* exports: 可以增加该模块输出的接口 
+	* module * module.uri: 该模块的绝对路径 
+	* module.dependencies: 该模块所依赖的模块名列表 
+	* module.exports: 模块的输出出口
+	
+	instance:
+	// math.js
+	define(function(require, exports, module) {
+	   exports.add = function() {
+		var sum = 0, i = 0, args = arguments, len = args.length;
+		while (i < len) {
+		  sum += args[i++];
+		}
+		return sum;
+	  };
+	})
+
+	// increment.js
+	define(function(require, exports, module) {
+	  var add = require('math').add;
+	  exports.increment = function(val) {
+		return add(val, 1);
+	  };
+	});
+
+	// program.js
+	define(function(require, exports, module) {
+	  var inc = require('increment').increment;
+	  var a = 1;
+	  inc(a); // 2
+
+	  module.id == "program";
+	});
+	
+	3.两者区别：
+	   1)对于依赖的模块，AMD是提前执行的，CMD是延迟执行的。CMD推崇依赖就近，AMD推崇依赖前置。
+		在CMD规范中，我们可以将依赖的引用写在代码的任意一行。
+		define(function(require, exports, module){
+			var a = require(‘../a’);
+			a.do();
+			var b = require(‘..b’);
+			b.do();
+		})
+
+	   代码在运行的时候，开始是不知道依赖的，在遍历了所有的require后，找出依赖进行加载。具体做法为，先将所有的function都字符串化，
+	   然后用正则匹配require关键字后面的依赖。这样做的代价就是牺牲了性能。
+	   而AMD是依赖前置，在代码运行之前，模块会将所有的依赖都进行加载。
+		define(['./a', './b'], function(a, b){
+		  a.do();
+		  b.do();
+		})
+	    这样做性能是有所提升，但是必须在开始的时候显示指定依赖。但是当函数题写的很多的时候，突然需要某个依赖，就需要拉回头在数组中进行添加（当然这里并不推荐一个函数写得过于长，不利于维护）。 
+		但是我们会有一种需求，就是在函数执行的时候并不能提前知道该模块是否需要引入
+		if(status){
+		  a.do();
+		}
+	    在这个函数内，可能依赖a也可能不依赖。对于一定依赖的模块叫做硬依赖，对于这种不一定依赖的情况，叫做软依赖。我们可以将软依赖当作硬依赖来处理，\
+		但是这样做是浪费性能的。所以这种情况我们需要一种处理方式。
+		define(['require', './b'], function(require, b) {
+		  // to do somthing
+
+		  if(status){
+			require(['/a'], function(a) {
+			  a.do();
+			})
+		  }
+		  b.do();
+		})	
+	 
+	4.总结
+	    对于js加载器的实现来讲
+	    1)性能优先：考虑按照依赖前置的思想，硬依赖前置，软依赖依靠异步回调的方式进行引入。 AMD
+        2)开发成本优先: 考虑按照依赖就近思想来设计加载器。 CMD
+	
 三、开发和调试技巧+快键键
 
 1、Elements页卡中几个有用的快捷键  [chrome dev tools]
