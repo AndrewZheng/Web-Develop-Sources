@@ -42,7 +42,8 @@
      background-color:#000;
    }
    #container{
-     min-height: 100%;height: auto !important;
+     min-height: 100%;
+	 height: auto !important;
 	 height:100%;
      background-color:blue;
    }
@@ -107,7 +108,7 @@
     BASE--Base 就是设定标签元素的预设值，例如浏览器的 reset 可以写在这里
     LAYOUT--Layout 是指整个网站的「大架构」的外观，而非 .button 这种小元件的 class。网站通常会有一些主要的大区块，可能是 header 或 footer，Layout 就是用来定义这些「大架构」的 CSS
     MODULE--这里的 Module 顾名思义，就是可以在其他地方被重复使用
-    PARTIAL--Partial 跟 Latout 不同，也跟 Module 不同，他比 Layout 的范围小，可能是header 底下的某个子元素。他不像 Module，他是特定单一领域下特别的设定。
+    PARTIAL--Partial 跟 Layout 不同，也跟 Module 不同，他比 Layout 的范围小，可能是header 底下的某个子元素。他不像 Module，他是特定单一领域下特别的设定。
     STATE--State 负责定义元素不同的状态下，所呈现的样式。但是并非指一个元素的 :hover 或 :active 下的状态。举例来说，一个导航栏分页，目前所在页面的分页需要加上 .active
     THEME--Theme 就像 Layout 一样负责「大架构」上的样式。简称皮肤
 
@@ -451,7 +452,33 @@ function isDate(s) {
 			   //something goes here
 			})
 			在Ios和Safari上使用click事件委托，如果只监听click事件，那么点击不会起作用，不执行函数。
-			所以必须同时监听touchstart事件
+			所以必须同时监听touchstart事件（PS：click = touchstart + touchend）
+			
+			Web/API--TouchEvent
+			
+			touchstart
+			touchmove
+			touchleave
+			touchenter
+	        touchcancel
+			touchend
+			
+			New Solution:
+	        var timestamp;
+			$('body').on('touchstart', 'img',function(){
+			    timestamp=new Date().getTime();
+			});
+			
+			$('body').on('touchend', 'img',function(){	   
+				var timestampEnd = new Date().getTime();            
+				if (timestampEnd - timestamp < 300) {
+					//something goes there
+				}
+			});
+			
+			Source link: 
+			https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent
+			
 			
 18、CMD和AMD的介绍和区别
     1.AMD--(异步模块定义)是为浏览器环境设计的。AMD 定义了一套 JavaScript 模块依赖异步加载标准，来解决同步加载的问题。
