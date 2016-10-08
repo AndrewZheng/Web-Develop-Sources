@@ -187,6 +187,14 @@
 		.room--bedroom{}
 		.room--bathroom{}
 		
+12、视窗高度的百分比
+	如果你的某个元素的定位或大小是基于视窗的高度来计算的，这就有点麻烦了，尤其是嵌套了好几层的情况。
+	css3提供了一个v系列的单位，其中vh就表示视窗的高度，但是安卓4.3-不支持。这里我们从rem入手，来个黑科技解决这个问题：
+	通过js设置html的font-size为视窗高度的十分之一，于是1rem就成了视窗高度的10%
+	document.addEventListener("DOMContentLoaded", function(event) {
+		document.documentElement.style.fontSize = window.innerHeight/10 + "px";
+	});
+  
 二、Javascipt经验积累
 
 1、js判断是PC还是移动设备
@@ -583,7 +591,27 @@ function isDate(s) {
 	    对于js加载器的实现来讲
 	    1)性能优先：考虑按照依赖前置的思想，硬依赖前置，软依赖依靠异步回调的方式进行引入。 AMD
         2)开发成本优先: 考虑按照依赖就近思想来设计加载器。 CMD
-	
+
+19、JS生成随机数 Math.random()
+    原理：random()方法可返回介于0~1之间的一个随机数。
+
+	1)希望生成1到任意值的随机数
+	// max - 期望的最大值
+	parseInt(Math.random()*max,10)+1;
+	Math.floor(Math.random()*max)+1;
+	Math.ceil(Math.random()*max);
+
+	2)希望生成0到任意值的随机数
+	// max - 期望的最大值
+	parseInt(Math.random()*(max+1),10);
+	Math.floor(Math.random()*(max+1));
+
+	3)希望生成任意值到任意值的随机数
+	// max - 期望的最大值
+	// min - 期望的最小值 
+	parseInt(Math.random()*(max-min+1)+min,10);
+	Math.floor(Math.random()*(max-min+1)+min);
+
 三、开发和调试技巧+快键键
 
 1、Elements页卡中几个有用的快捷键  [chrome dev tools]
