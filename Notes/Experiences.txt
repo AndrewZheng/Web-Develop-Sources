@@ -195,6 +195,44 @@
 		document.documentElement.style.fontSize = window.innerHeight/10 + "px";
 	});
   
+13、深度理解jquery.index()
+    1)定义和用法
+      index()方法返回指定元素相对于其他指定元素的 index 位置。
+      这些元素可通过 jQuery 选择器或 DOM 元素来指定。
+      注释：如果未找到元素，index() 将返回 -1。
+      
+	  第一个匹配元素的 index，相对于同胞元素
+      获得第一个匹配元素相对于其同胞元素的 index 位置。
+	  Syntax: $(selector).index()
+	  
+     元素的 index，相对于选择器
+     获得元素相对于选择器的 index 位置。
+     该元素可以通过 DOM 元素或 jQuery 选择器来指定。
+	 Syntax： $(selector).index(element)
+     element可选。规定要获得index位置的元素。可以是 DOM 元素或 jQuery 选择器。
+	 
+	2)实例
+	<script type="text/javascript">
+	$(document).ready(function(){
+	  $("button").click(function(){
+		alert($(".js-optionb").index('.js-option'));
+	  });
+	});
+    </script>
+	如  <button>Check</button>
+		<div class="js-options">
+			<div class="js-opa"></div>
+			<div class="js-option"></div>
+			<div class="js-option"></div>
+			<div class="js-option"></div>
+			<div class="js-option js-optionb"></div>
+			<div class="js-option"></div>
+			<div class="js-option"></div>
+			<div class="js-opa"></div>
+		</div>
+	 输出3==》因为代码的意思是弹出.js-optionb这个类相对于所有.js-option类的index位置  并且index从0计数
+	 如果我们直接用$(".js-optionb").index();
+	 输出4==》因为代码的意思是获得第一个匹配元素相对于其同胞元素的index位置。
 二、Javascipt经验积累
 
 1、js判断是PC还是移动设备
