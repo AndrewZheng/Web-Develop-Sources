@@ -233,6 +233,24 @@
 	 输出3==》因为代码的意思是弹出.js-optionb这个类相对于所有.js-option类的index位置  并且index从0计数
 	 如果我们直接用$(".js-optionb").index();
 	 输出4==》因为代码的意思是获得第一个匹配元素相对于其同胞元素的index位置。
+	 
+14、REM--适用所有设备和屏幕分辨率
+
+通过设置html根元素来改变页面所有使用rem为单位的元素的大小
+
+(function (doc, win) {
+var docEl = doc.documentElement,
+resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+recalc = function () {
+var clientWidth = docEl.clientWidth;
+if (!clientWidth) return;
+docEl.style.fontSize = 20 * (clientWidth / 320) + 'px';
+};
+if (!doc.addEventListener) return;
+win.addEventListener(resizeEvt, recalc, false);
+doc.addEventListener('DOMContentLoaded', recalc, false);
+})(document, window);
+
 二、Javascipt经验积累
 
 1、js判断是PC还是移动设备
