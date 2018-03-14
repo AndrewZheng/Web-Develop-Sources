@@ -251,6 +251,45 @@ win.addEventListener(resizeEvt, recalc, false);
 doc.addEventListener('DOMContentLoaded', recalc, false);
 })(document, window);
 
+15、创建固定宽高比比例的盒子
+Code：
+<div class="container"><div></div></div>
+
+.container{
+		    height:0;
+			padding-bottom:20%;
+			position:relative;
+			background-color:red;
+		}
+		
+		  .container div{
+		       border:2px dashed #ddd;
+			   height:100%;
+			   left:0;
+			   position:absolute;
+			   top:0;
+			   width:100%;
+			   background-color:yellow;
+		  }
+  
+PS：设置20%的padding-bottom会使盒子得到相当于其宽度20%的高度，使用绝对定位让子元素的盒子充满父元素，
+    然后通过设置padding-bottom百分比来达到想要的比例，如上比例为 （100%/20%= 5:1）同理我需要得到16:9的比例
+	则只需要换算下，16x=9X10==>x=90/16=5.625; 则值设置为56.25%即可;
+	
+16、垂直居中任何元素
+Code：
+html,body{
+    height:100%;
+	margin:0;
+}
+body{
+   -webkit-align-items:center;
+   -ms-flex-align:center;
+   align-items:center;
+   display:-webkit-flex;
+   display:flex;
+}
+
 二、Javascipt经验积累
 
 1、js判断是PC还是移动设备
@@ -667,7 +706,119 @@ function isDate(s) {
 	// min - 期望的最小值 
 	parseInt(Math.random()*(max-min+1)+min,10);
 	Math.floor(Math.random()*(max-min+1)+min);
+	
+20、修改modal框出现的左右多动的问题
+Modal.prototype.adjustBody_beforeShow = function(){
+    var body_scrollHeight = $('body')[0].scrollHeight;
+    var docHeight = document.documentElement.clientHeight;
+    if(body_scrollHeight > docHeight){
+      $('body').css({
+        'overflow' : 'hidden',
+        'margin-right' : '15px'
+      });
+      $('.modal').css({'overflow-y':'scroll'})
+    }else{
+      $('body').css({
+        'overflow' : 'auto',
+        'margin-right' : '0'
+      });
+      $('.modal').css({'overflow-y':'auto'})
+    }
+  }
+  Modal.prototype.adjustBody_afterShow = function(){
+    var body_scrollHeight = $('body')[0].scrollHeight;
+    var docHeight = document.documentElement.clientHeight;
+    if(body_scrollHeight > docHeight){
+      $('body').css({
+        'overflow' : 'auto',
+        'margin-right' : '0'
+      });
+    }else{
+      $('body').css({
+        'overflow' : 'auto',
+        'margin-right' : '0'
+      });
+    }
+  }
+  
+ 21、Javascript中的null、undefined
+ - null是关键字；undefined是Global对象的一个属性 
 
+- null是对象(空对象, 没有任何属性和方法)；undefined是undefined类型的值。试试下面的代码： 
+
+       document.writeln(typeof null); //return object 
+       document.writeln(typeof undefined); //return undefined 
+
+- 对象模型中，所有的对象都是Object或其子类的实例，但null对象例外： 
+       document.writeln(null instanceof Object); //return false 
+
+- null“等值(==)”于undefined，但不“全等值(===)”于undefined： 
+       document.writeln(null == undefined); //return true 
+       document.writeln(null === undefined); //return false 
+
+- 运算时null与undefined都可以被类型转换为false，但不等值于false： 
+       document.writeln(!null, !undefined); //return true,true 
+       document.writeln(null==false); //return false 
+       document.writeln(undefined==false); //return false 
+	   
+22、实现返回并刷新的几种方式
+<a href="javascript:history.go(-1)">返回上一页</a> 
+<a href="javascript:location.reload()">刷新当前页面</a> 
+<a href="javascript:" onclick="history.go(-2); ">返回前两页</a> 
+<a href="javascript:" onclick="self.location=document.referrer;">返回上一页并刷新</a> 
+<a href="javascript:" onclick="history.back(); ">返回上一页</a> 
+
+页面跳转： 
+onclick="window.location.href='list.php'" 
+Javascript刷新页面的几种方法： 
+
+	1，history.go(0) 
+	2，location.reload() 
+	3，location=location 
+	4，location.assign(location) 
+	5，document.execCommand('Refresh') 
+	6，window.navigate(location) 
+	7，location.replace(location) 
+	8，document.URL=location.href 
+
+23、 RegExp 构造函数创建了一个正则表达式对象，用于将文本与一个模式匹配 
+    1）new RegExp(pattern [, flag]) 
+	第二个参数flag的取值为以下值的任意组合：
+	g   全局匹配;找到所有匹配，而不是在第一个匹配后停止  
+	i   忽略大小写  
+	m   多行; 将开始和结束字符（^和$）视为在多行上工作（也就是，分别匹配每一行的开始和结束（由 \n 或 \r 分割），而不只是只匹配整个输入字符串的最开始和最末尾处。  
+	u   Unicode; 将模式视为Unicode序列点的序列  
+	y   粘性匹配; 仅匹配目标字符串中此正则表达式的lastIndex属性指示的索引(并且不尝试从任何后续的索引匹配)
+	
+	2）在ES5中，RegExp构造函数的参数有两种情况
+	第一种是，参数是字符串，这时第二个参数表达式的修饰符（flag）。
+	var regex = new RegExp('xyz', 'i');  
+	// 等价于  
+    var regex = /xyz/i;
+	
+	第二种情况是，参数是正则表达式，这时会返回一个原有正则表达式的拷贝。
+	var regex = new RegExp(/xyz/i);  
+	// 等价于  
+	var regex = /xyz/i;  
+	
+	但是，ES5不允许此时使用第二个参数添加修饰符，否则会报错。
+	var regex = new RegExp(/xyz/, 'i');  
+	// Uncaught TypeError: Cannot supply flags when constructing one RegExp from another  
+    ES6改变了这种行为，如果RegExp构造函数第一个参数是一个正则对象，那么可以使用第二个参数指定修饰符。而且返回的正则表达式会忽略原有的正则表达式修饰符，
+	只使用新指定的修饰符。要在表达式后面加上 .flags。
+
+    new RegExp(/abc/ig, 'i').flags  
+    // "i"  
+   上面代码中，原有正则对象的修饰符是 ig ，它会被第二个参数 i 覆盖。
+
+24、前端开发转移到后端环境，意味着可以适用标准的软件工程流程。
+	1)本地开发（developing）
+	2)静态代码检查（linting）
+	3)单元测试（testing）
+	4)合并进入主干（merging）
+	5)自动构建（building）
+	6)自动发布（publishing）
+	
 三、开发和调试技巧+快键键
 
 1、Elements页卡中几个有用的快捷键  [chrome dev tools]
@@ -707,4 +858,4 @@ function isDate(s) {
 		－ 验证码 这个就牛逼了，防御的滴水不漏。可惜万事有利必有其弊，你总不能发每个请求都让用户敲一次验证码吧，所以这种一般只在某些特定场景用。
 		－ token  这个应该是现在比较通用的方案。当然token具体的生成方案就一堆了
 
-
+		

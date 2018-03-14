@@ -1,0 +1,157 @@
+1、Html事件绑定有几种方式？
+原生事件或者属性事件在JS里通过onclick绑定：xxx.onclick = test
+Dom标准通过事件添加进行绑定：addEventListener("click",test, false)
+IE事件：attachEvent("onclick",test)
+
+那么第二个问题来了，Javascript的事件流模型都有什么？
+“事件捕捉”：事件由最不具体的节点先接收，然后逐级向下，一直到最具体的目标事件
+“事件冒泡”：事件开始由最具体的元素接受，然后逐级向上传播
+
+“DOM事件流”：三个阶段：事件捕捉，目标阶段，事件冒泡
+IE事件流：目标事件和事件冒泡
+
+阻止事件冒泡的方式：
+stopPropagation：function(e){
+	if(e.stopPropagation){
+	 e.stopPropagation();
+	}else{
+	 e.cancelBubble=true;
+	}
+}  
+
+ 阻止事件的默认行为：
+preventDefault: function(){
+	if(e.perventDefault){
+	 e.perventDefault();
+	}else{
+	 e.returnValue=false;
+	}
+} 
+
+2、CSS样式的优先级问题
+!important（10000） > style(内联) > Id(权重100) > class(权重10) > 标签（权重1）
+
+3、用js写一个正则匹配标签中是否包含一个class
+function hasClassName(id,name)}{
+ var cls=document.getElementById(id).className;
+ var reg=new RegExp("(^|\\s)"+name+"$|\\s","g");
+ return reg.test(name);
+}
+
+4、闭包的主要几个特性
+  事件循环绑定，输出结果（考察闭包）
+  一个闭包是一个可以自己拥有独立的环境与变量的的表达式
+  内部函数只可以在外部函数中访问。
+  内部函数形成了一个闭包：它可以访问外部函数的参数和变量，但是外部函数却不能使用它的参数和变量。
+  
+  var list=document.getElementsByTagName("a");//假设10个a
+  for(var i;i<list.length;i++){
+       list[i].onclick=function(i){
+	      return function(){console.log(i)};
+	   }
+  }
+  //最终点击时打印出10
+  
+  要求输出打印index的解决方案:
+  1)使用IFIE自执行函数解决
+  var list=document.getElementsByTagName("a");//假设10个a
+  for(var i;i<list.length;i++){
+       list[i].onclick=(function(i){
+	      return function(){console.log(i)};
+	   })(i);
+  }
+  
+  2)使用ES6的let关键字
+   var list=document.getElementsByTagName("a");//假设10个a
+   for(let i;i<list.length;i++){
+          list[i].onclick=(function(i){
+	      return function(){console.log(i)};
+	}
+  //最终点击时打印出索引
+  
+  闭包的作用:
+  通过闭包可以把局部变量传递出来，就是通过闭包可以访问函数内部的变量，并且实现数量累加。
+  使用闭包可以避免空间污染，闭包内部的变量都只能在内部使用，这样有效避免和外部变量的混淆。
+  
+5、JS数组去重。
+  1)遍历数组法
+    // 最简单数组去重法 
+	function unique1(array){ 
+	    var n = [];  
+		for(var i = 0; i < array.length; i++){ 
+		   if (n.indexOf(array[i]) == -1) n.push(array[i]); 
+		} 
+		return n; 
+	}
+   
+   2)对象键值对法
+   // 速度最快， 占空间最多（空间换时间） 
+	function unique2(array){ 
+		var n = {}, r = [], len = array.length, val, type; 
+		for (var i = 0; i < array.length; i++) { 
+			val = array[i]; 
+			type = typeof val; 
+			if (!n[val]) { 
+				 n[val] = [type]; 
+				 r.push(val); 
+			} else if (n[val].indexOf(type) < 0) { 
+				n[val].push(type); 
+				r.push(val); 
+			} 
+		} 
+		return r; 
+	}
+	
+	3)数组下标判断法
+	function unique3(array){ 
+		var n = [array[0]];  
+		for(var i = 1; i < array.length; i++) { 
+			//如果当前数组的第i项在当前数组中第一次出现的位置不是i， 
+			//那么表示第i项是重复的，忽略掉。否则存入结果数组 
+			if (array.indexOf(array[i]) == i) n.push(array[i]); 
+		} 
+		return n; 
+	}
+	
+	4)排序后相邻去除法
+	function unique4(array){ 
+		array.sort(); 
+		var re=[array[0]]; 
+		for(var i = 1; i < array.length; i++){ 
+			if( array[i] !== re[re.length-1]){ 
+			  re.push(array[i]); 
+			} 
+		} 
+		return re; 
+	} 
+
+    5)优化遍历数组法
+	// 思路：获取没重复的最右一值放入新数组 
+	function unique5(array){ 
+		var r = []; 
+		for(var i = 0, l = array.length; i < l; i++) { 
+		 for(var j = i + 1; j < l; j++) 
+		  if (array[i] === array[j]) j = ++i; 
+		 r.push(array[i]); 
+		 } 
+		 return r; 
+	}
+	
+	判断浏览器是否支持indexOf ，indexOf 为ecmaScript5新方法 IE8以下（包括IE8， IE8只支持部分ecma5）不支持
+	if (!Array.prototype.indexOf){ 
+		// 新增indexOf方法 
+		Array.prototype.indexOf = function(item){ 
+		var result = -1, a_item = null; 
+		if (this.length == 0){ 
+		    return result; 
+		} 
+		for(var i = 0, len = this.length; i < len; i++){ 
+		a_item = this[i]; 
+		if (a_item === item){ 
+		result = i; 
+		break; 
+		} 
+		} 
+		return result; 
+	} 
+} 
